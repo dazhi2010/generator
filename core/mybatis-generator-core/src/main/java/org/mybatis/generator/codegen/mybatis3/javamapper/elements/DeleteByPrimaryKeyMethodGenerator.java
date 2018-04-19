@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2017 the original author or authors.
+ *    Copyright 2006-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -49,40 +49,46 @@ public class DeleteByPrimaryKeyMethodGenerator extends
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
         method.setName(introspectedTable.getDeleteByPrimaryKeyStatementId());
 
-        if (!isSimple && introspectedTable.getRules().generatePrimaryKeyClass()) {
-            FullyQualifiedJavaType type = new FullyQualifiedJavaType(
-                    introspectedTable.getPrimaryKeyType());
-            importedTypes.add(type);
-            method.addParameter(new Parameter(type, "key")); //$NON-NLS-1$
-        } else {
+//        if (!isSimple && introspectedTable.getRules().generatePrimaryKeyClass()) {
+//            FullyQualifiedJavaType type = new FullyQualifiedJavaType(
+//                    introspectedTable.getPrimaryKeyType());
+//            importedTypes.add(type);
+//            method.addParameter(new Parameter(type, "key")); //$NON-NLS-1$
+//        } else {
             // no primary key class - fields are in the base class
             // if more than one PK field, then we need to annotate the
             // parameters
             // for MyBatis
-            List<IntrospectedColumn> introspectedColumns = introspectedTable
-                    .getPrimaryKeyColumns();
-            boolean annotate = introspectedColumns.size() > 1;
-            if (annotate) {
-                importedTypes.add(new FullyQualifiedJavaType(
-                        "org.apache.ibatis.annotations.Param")); //$NON-NLS-1$
-            }
-            StringBuilder sb = new StringBuilder();
-            for (IntrospectedColumn introspectedColumn : introspectedColumns) {
-                FullyQualifiedJavaType type = introspectedColumn
-                        .getFullyQualifiedJavaType();
-                importedTypes.add(type);
-                Parameter parameter = new Parameter(type, introspectedColumn
-                        .getJavaProperty());
-                if (annotate) {
-                    sb.setLength(0);
-                    sb.append("@Param(\""); //$NON-NLS-1$
-                    sb.append(introspectedColumn.getJavaProperty());
-                    sb.append("\")"); //$NON-NLS-1$
-                    parameter.addAnnotation(sb.toString());
-                }
-                method.addParameter(parameter);
-            }
+        List<IntrospectedColumn> introspectedColumns = introspectedTable
+                .getPrimaryKeyColumns();
+//            boolean annotate = introspectedColumns.size() > 1;
+//            if (annotate) {
+//                importedTypes.add(new FullyQualifiedJavaType(
+//                        "org.apache.ibatis.annotations.Param")); //$NON-NLS-1$
+//            }
+//            StringBuilder sb = new StringBuilder();
+//            for (IntrospectedColumn introspectedColumn : introspectedColumns) {
+        int keyCount = introspectedColumns.size();
+        FullyQualifiedJavaType typeArgument = null;
+        if(keyCount==1){
+            typeArgument = introspectedColumns.get(0) .getFullyQualifiedJavaType();
+        }else{
+            typeArgument = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         }
+        FullyQualifiedJavaType type = FullyQualifiedJavaType.getNewListInstance();
+        type.addTypeArgument(typeArgument);
+        importedTypes.add(type);
+        Parameter parameter = new Parameter(type, "list");
+//                if (annotate) {
+//                    sb.setLength(0);
+//                    sb.append("@Param(\""); //$NON-NLS-1$
+//                    sb.append(introspectedColumn.getJavaProperty());
+//                    sb.append("\")"); //$NON-NLS-1$
+//                    parameter.addAnnotation(sb.toString());
+//                }
+                method.addParameter(parameter);
+//            }
+//        }
 
         context.getCommentGenerator().addGeneralMethodComment(method,
                 introspectedTable);

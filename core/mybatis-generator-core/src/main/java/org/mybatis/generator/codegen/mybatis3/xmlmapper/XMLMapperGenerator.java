@@ -76,7 +76,7 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         addSelectByExampleWithBLOBsElement(answer);
         addSelectByExampleWithoutBLOBsElement(answer);
         addSelectByPrimaryKeyElement(answer);
-        addDeleteByPrimaryKeyElement(answer);
+        addDeletePhysicalElement(answer);
         addDeleteByExampleElement(answer);
         addInsertElement(answer);
         addInsertSelectiveElement(answer);
@@ -166,7 +166,7 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         }
     }
 
-    protected void addDeleteByPrimaryKeyElement(XmlElement parentElement) {
+    protected void addDeletePhysicalElement(XmlElement parentElement) {
         if (introspectedTable.getRules().generateDeleteByPrimaryKey()) {
             AbstractXmlElementGenerator elementGenerator = new DeleteByPrimaryKeyElementGenerator(false);
             initializeAndExecuteGenerator(elementGenerator, parentElement);

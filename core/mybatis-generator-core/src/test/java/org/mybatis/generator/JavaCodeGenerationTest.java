@@ -58,8 +58,8 @@ public class JavaCodeGenerationTest {
     public static List<GeneratedJavaFile> generateJavaFiles() throws Exception {
         List<GeneratedJavaFile> generatedFiles = new ArrayList<GeneratedJavaFile>();
         generatedFiles.addAll(generateJavaFilesMybatis());
-        generatedFiles.addAll(generateJavaFilesMybatisDsql());
-        generatedFiles.addAll(generateJavaFilesIbatis());
+//        generatedFiles.addAll(generateJavaFilesMybatisDsql());
+//        generatedFiles.addAll(generateJavaFilesIbatis());
         return generatedFiles;
     }
 

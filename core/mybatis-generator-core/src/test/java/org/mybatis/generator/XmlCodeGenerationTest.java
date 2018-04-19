@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2017 the original author or authors.
+ *    Copyright 2006-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ public class XmlCodeGenerationTest {
     public static List<GeneratedXmlFile> generateXmlFiles() throws Exception {
         List<GeneratedXmlFile> generatedFiles = new ArrayList<GeneratedXmlFile>();
         generatedFiles.addAll(generateXmlFilesMybatis());
-        generatedFiles.addAll(generateXmlFilesIbatis());
+//        generatedFiles.addAll(generateXmlFilesIbatis());
         return generatedFiles;
     }
 
