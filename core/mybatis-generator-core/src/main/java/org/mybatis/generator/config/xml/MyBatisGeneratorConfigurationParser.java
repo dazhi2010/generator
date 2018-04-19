@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2017 the original author or authors.
+ *    Copyright 2006-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -269,7 +269,10 @@ public class MyBatisGeneratorConfigurationParser {
         if (stringHasValue(enableInsert)) {
             tc.setInsertStatementEnabled(isTrue(enableInsert));
         }
-
+        String enableInsertSelective = attributes.getProperty("enableInsertSelective"); //$NON-NLS-1$
+        if (stringHasValue(enableInsertSelective)) {
+            tc.setInsertSelectiveStatementEnabled(isTrue(enableInsertSelective));
+        }
         String enableSelectByPrimaryKey = attributes
                 .getProperty("enableSelectByPrimaryKey"); //$NON-NLS-1$
         if (stringHasValue(enableSelectByPrimaryKey)) {
