@@ -37,26 +37,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-import org.mybatis.generator.config.ColumnOverride;
-import org.mybatis.generator.config.ColumnRenamingRule;
-import org.mybatis.generator.config.CommentGeneratorConfiguration;
-import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.ConnectionFactoryConfiguration;
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.DomainObjectRenamingRule;
-import org.mybatis.generator.config.GeneratedKey;
-import org.mybatis.generator.config.IgnoredColumn;
-import org.mybatis.generator.config.IgnoredColumnException;
-import org.mybatis.generator.config.IgnoredColumnPattern;
-import org.mybatis.generator.config.JDBCConnectionConfiguration;
-import org.mybatis.generator.config.JavaClientGeneratorConfiguration;
-import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
-import org.mybatis.generator.config.JavaTypeResolverConfiguration;
-import org.mybatis.generator.config.ModelType;
-import org.mybatis.generator.config.PluginConfiguration;
-import org.mybatis.generator.config.PropertyHolder;
-import org.mybatis.generator.config.SqlMapGeneratorConfiguration;
-import org.mybatis.generator.config.TableConfiguration;
+import org.mybatis.generator.config.*;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.ObjectFactory;
 import org.w3c.dom.Element;
@@ -264,11 +245,11 @@ public class MyBatisGeneratorConfigurationParser {
         if (stringHasValue(alias)) {
             tc.setAlias(alias);
         }
-        String deletedField = attributes.getProperty("deletedField"); //$NON-NLS-1$
+        String deletedField = attributes.getProperty(PropertyRegistry.TABLE_DELETED_FIELD); //$NON-NLS-1$
         if (!stringHasValue(deletedField)) {
             deletedField = "deleted";//如果未设置，默认为deleted
         }
-        tc.addProperty("deletedField",deletedField);//向table配置中添加属性
+        tc.addProperty(PropertyRegistry.TABLE_DELETED_FIELD,deletedField);//向table配置中添加属性
 
         String enableInsert = attributes.getProperty("enableInsert"); //$NON-NLS-1$
         if (stringHasValue(enableInsert)) {

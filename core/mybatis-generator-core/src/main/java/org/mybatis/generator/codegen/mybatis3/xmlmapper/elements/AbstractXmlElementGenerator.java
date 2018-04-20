@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2016 the original author or authors.
+ *    Copyright 2006-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -66,6 +66,13 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
         XmlElement answer = new XmlElement("include"); //$NON-NLS-1$
         answer.addAttribute(new Attribute("refid", //$NON-NLS-1$
                 introspectedTable.getBaseColumnListId()));
+        return answer;
+    }
+
+    protected XmlElement getWhereFullElement() {
+        XmlElement answer = new XmlElement("include"); //$NON-NLS-1$
+        answer.addAttribute(new Attribute("refid", //$NON-NLS-1$
+                "where_full"));
         return answer;
     }
 

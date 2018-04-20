@@ -20,6 +20,7 @@ import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
+import org.mybatis.generator.config.PropertyRegistry;
 
 /**
  * 假删除xml
@@ -52,7 +53,7 @@ public class DeleteElementGenerator extends
         sb.append("update "); //$NON-NLS-1$
         sb.append(introspectedTable.getFullyQualifiedTableNameAtRuntime());//获取表名
         sb.append(" set ");//deleted=1
-        sb.append(introspectedTable.getTableConfigurationProperty("deletedField"));
+        sb.append(introspectedTable.getTableConfigurationProperty(PropertyRegistry.TABLE_DELETED_FIELD));
         sb.append(" = 1");
         answer.addElement(new TextElement(sb.toString()));
         answer.addElement(new TextElement("where false"));//$NON-NLS-1$

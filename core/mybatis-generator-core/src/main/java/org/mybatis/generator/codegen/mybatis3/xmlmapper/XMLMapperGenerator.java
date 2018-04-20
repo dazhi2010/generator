@@ -54,9 +54,11 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         addMyBatis3UpdateByExampleWhereClauseElement(answer);
         addBaseColumnListElement(answer);
         addBlobColumnListElement(answer);
+        addWhereFullClauseElement(answer);//所有的查询条件
         addSelectByExampleWithBLOBsElement(answer);
         addSelectByExampleWithoutBLOBsElement(answer);
         addSelectByPrimaryKeyElement(answer);
+        addSelectSelectiveElement(answer);//按照条件查询
         addDeleteElement(answer);//假删除
         addDeletePhysicalElement(answer);
         addDeleteByExampleElement(answer);
@@ -119,6 +121,12 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
         }
     }
 
+    protected void addWhereFullClauseElement(XmlElement parentElement) {
+//        if (introspectedTable.getRules().generateBlobColumnList()) {
+        AbstractXmlElementGenerator elementGenerator = new WhereFullClauseElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+//        }
+    }
     protected void addSelectByExampleWithoutBLOBsElement(
             XmlElement parentElement) {
         if (introspectedTable.getRules().generateSelectByExampleWithoutBLOBs()) {
@@ -139,6 +147,13 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
             AbstractXmlElementGenerator elementGenerator = new SelectByPrimaryKeyElementGenerator();
             initializeAndExecuteGenerator(elementGenerator, parentElement);
         }
+    }
+
+    protected void addSelectSelectiveElement(XmlElement parentElement) {
+//        if (introspectedTable.getRules().generateSelectByPrimaryKey()) {
+        AbstractXmlElementGenerator elementGenerator = new SelectSelectiveElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+//        }
     }
 
     protected void addDeleteByExampleElement(XmlElement parentElement) {
