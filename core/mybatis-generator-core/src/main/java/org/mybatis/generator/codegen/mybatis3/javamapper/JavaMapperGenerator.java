@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2017 the original author or authors.
+ *    Copyright 2006-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,21 +28,7 @@ import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.codegen.AbstractJavaClientGenerator;
 import org.mybatis.generator.codegen.AbstractXmlGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.AbstractJavaMapperMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.CountByExampleMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.DeleteByExampleMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.DeleteByPrimaryKeyMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.InsertMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.InsertSelectiveMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectByExampleWithBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectByExampleWithoutBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectByPrimaryKeyMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByExampleSelectiveMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByExampleWithBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByExampleWithoutBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByPrimaryKeySelectiveMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByPrimaryKeyWithBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByPrimaryKeyWithoutBLOBsMethodGenerator;
+import org.mybatis.generator.codegen.mybatis3.javamapper.elements.*;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
 
@@ -88,7 +74,8 @@ public class JavaMapperGenerator extends AbstractJavaClientGenerator {
 
         addCountByExampleMethod(interfaze);
         addDeleteByExampleMethod(interfaze);
-        addDeleteByPrimaryKeyMethod(interfaze);
+        addDeletePhysicalMethod(interfaze);
+        addDeleteMethod(interfaze);
         addInsertMethod(interfaze);
         addInsertSelectiveMethod(interfaze);
         addSelectByExampleWithBLOBsMethod(interfaze);
@@ -129,13 +116,18 @@ public class JavaMapperGenerator extends AbstractJavaClientGenerator {
         }
     }
 
-    protected void addDeleteByPrimaryKeyMethod(Interface interfaze) {
+    protected void addDeletePhysicalMethod(Interface interfaze) {
         if (introspectedTable.getRules().generateDeleteByPrimaryKey()) {
             AbstractJavaMapperMethodGenerator methodGenerator = new DeleteByPrimaryKeyMethodGenerator(false);
             initializeAndExecuteGenerator(methodGenerator, interfaze);
         }
     }
-
+    protected void addDeleteMethod(Interface interfaze) {
+        if (introspectedTable.getRules().generateDeleteByPrimaryKey()) {
+            AbstractJavaMapperMethodGenerator methodGenerator = new DeleteMethodGenerator(false);
+            initializeAndExecuteGenerator(methodGenerator, interfaze);
+        }
+    }
     protected void addInsertMethod(Interface interfaze) {
         if (introspectedTable.getRules().generateInsert()) {
             AbstractJavaMapperMethodGenerator methodGenerator = new InsertMethodGenerator(false);

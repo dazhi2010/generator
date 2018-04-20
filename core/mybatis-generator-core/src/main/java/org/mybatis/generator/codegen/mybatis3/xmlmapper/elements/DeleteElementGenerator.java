@@ -22,47 +22,38 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 
 /**
- * 
- * @author Jeff Butler
+ * 假删除xml
+ * @author yuqinfa
  * 
  */
-public class DeleteByPrimaryKeyElementGenerator extends
+public class DeleteElementGenerator extends
         AbstractXmlElementGenerator {
 
     private boolean isSimple;
 
-    public DeleteByPrimaryKeyElementGenerator(boolean isSimple) {
+    public DeleteElementGenerator(boolean isSimple) {
         super();
         this.isSimple = isSimple;
     }
 
     @Override
     public void addElements(XmlElement parentElement) {
-        XmlElement answer = new XmlElement("delete"); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("update"); //$NON-NLS-1$
 
         answer.addAttribute(new Attribute(
-                "id", introspectedTable.getDeleteByPrimaryKeyStatementId())); //$NON-NLS-1$
+                "id", introspectedTable.getDeleteStatementId())); //$NON-NLS-1$
         String parameterClass = "java.util.List";//直接修改为传入列表进行批量删除
-//        if (!isSimple && introspectedTable.getRules().generatePrimaryKeyClass()) {
-//            parameterClass = introspectedTable.getPrimaryKeyType();
-//        } else {
-//            // PK fields are in the base class. If more than on PK
-//            // field, then they are coming in a map.
-//            if (introspectedTable.getPrimaryKeyColumns().size() > 1) {
-//                parameterClass = "map"; //$NON-NLS-1$
-//            } else {
-//                parameterClass = introspectedTable.getPrimaryKeyColumns()
-//                        .get(0).getFullyQualifiedJavaType().toString();
-//            }
-//        }
         answer.addAttribute(new Attribute("parameterType", //$NON-NLS-1$
                 parameterClass));
 
         context.getCommentGenerator().addComment(answer);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("delete from "); //$NON-NLS-1$
+        sb.append("update "); //$NON-NLS-1$
         sb.append(introspectedTable.getFullyQualifiedTableNameAtRuntime());//获取表名
+        sb.append(" set ");//deleted=1
+        sb.append(introspectedTable.getTableConfigurationProperty("deletedField"));
+        sb.append(" = 1");
         answer.addElement(new TextElement(sb.toString()));
         answer.addElement(new TextElement("where false"));//$NON-NLS-1$
 

@@ -76,6 +76,7 @@ public abstract class IntrospectedTable {
         ATTR_COUNT_BY_EXAMPLE_STATEMENT_ID,
         ATTR_DELETE_BY_EXAMPLE_STATEMENT_ID,
         ATTR_DELETE_BY_PRIMARY_KEY_STATEMENT_ID,
+        ATTR_DELETE_STATEMENT_ID,
         ATTR_INSERT_STATEMENT_ID,
         ATTR_INSERT_SELECTIVE_STATEMENT_ID,
         ATTR_SELECT_ALL_STATEMENT_ID,
@@ -529,7 +530,8 @@ public abstract class IntrospectedTable {
 
         setCountByExampleStatementId("countByExample"); //$NON-NLS-1$
         setDeleteByExampleStatementId("deleteByExample"); //$NON-NLS-1$
-        setDeleteByPrimaryKeyStatementId("deletePhysical"); //$NON-NLS-1$//修改为物理删除专用，区别于假删除
+        setDeleteByPrimaryKeyStatementId("deletePhysical"); //$NON-NLS-1$ //修改为物理删除专用，区别于假删除
+        setDeleteStatementId("delete");//$NON-NLS-1$ //假删除
         setInsertStatementId("insert"); //$NON-NLS-1$
         setInsertSelectiveStatementId("insertSelective"); //$NON-NLS-1$
         setSelectAllStatementId("selectAll"); //$NON-NLS-1$
@@ -649,7 +651,10 @@ public abstract class IntrospectedTable {
         internalAttributes.put(
                 InternalAttribute.ATTR_DELETE_BY_PRIMARY_KEY_STATEMENT_ID, s);
     }
-
+    public void setDeleteStatementId(String s) {
+        internalAttributes.put(
+                InternalAttribute.ATTR_DELETE_STATEMENT_ID, s);
+    }
     public void setDeleteByExampleStatementId(String s) {
         internalAttributes.put(
                 InternalAttribute.ATTR_DELETE_BY_EXAMPLE_STATEMENT_ID, s);
@@ -754,7 +759,10 @@ public abstract class IntrospectedTable {
         return internalAttributes
                 .get(InternalAttribute.ATTR_DELETE_BY_PRIMARY_KEY_STATEMENT_ID);
     }
-
+    public String getDeleteStatementId() {
+        return internalAttributes
+                .get(InternalAttribute.ATTR_DELETE_STATEMENT_ID);
+    }
     public String getDeleteByExampleStatementId() {
         return internalAttributes
                 .get(InternalAttribute.ATTR_DELETE_BY_EXAMPLE_STATEMENT_ID);

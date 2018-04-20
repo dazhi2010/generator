@@ -48,7 +48,7 @@
       <property name="enableSubPackages" value="true" />
     </javaClientGenerator>
 
-    <table tableName="PKOnly"
+    <table tableName="PKOnly" deletedField="deleted1"
            enableCountByExample="false" enableUpdateByExample="false"
            enableDeleteByExample="false" enableSelectByExample="false"
            selectByExampleQueryId="false" enableInsertSelective="false"

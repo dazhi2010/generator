@@ -264,6 +264,11 @@ public class MyBatisGeneratorConfigurationParser {
         if (stringHasValue(alias)) {
             tc.setAlias(alias);
         }
+        String deletedField = attributes.getProperty("deletedField"); //$NON-NLS-1$
+        if (!stringHasValue(deletedField)) {
+            deletedField = "deleted";//如果未设置，默认为deleted
+        }
+        tc.addProperty("deletedField",deletedField);//向table配置中添加属性
 
         String enableInsert = attributes.getProperty("enableInsert"); //$NON-NLS-1$
         if (stringHasValue(enableInsert)) {
