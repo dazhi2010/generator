@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2017 the original author or authors.
+ *    Copyright 2006-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
+import org.mybatis.generator.codegen.mybatis3.vo.VoGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.ObjectFactory;
@@ -46,6 +47,8 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     
     protected List<AbstractJavaGenerator> javaModelGenerators;
 
+    protected List<AbstractJavaGenerator> javaVoGenerators;
+
     protected List<AbstractJavaGenerator> clientGenerators;
 
     protected AbstractXmlGenerator xmlMapperGenerator;
@@ -53,6 +56,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     public IntrospectedTableMyBatis3Impl() {
         super(TargetRuntime.MYBATIS3);
         javaModelGenerators = new ArrayList<AbstractJavaGenerator>();
+        javaVoGenerators = new ArrayList<AbstractJavaGenerator>();
         clientGenerators = new ArrayList<AbstractJavaGenerator>();
     }
 
@@ -60,6 +64,8 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     public void calculateGenerators(List<String> warnings,
             ProgressCallback progressCallback) {
         calculateJavaModelGenerators(warnings, progressCallback);
+
+        calculateJavaVoGenerators(warnings, progressCallback);
         
         AbstractJavaClientGenerator javaClientGenerator =
                 calculateClientGenerators(warnings, progressCallback);
@@ -154,6 +160,13 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             javaModelGenerators.add(javaGenerator);
         }
     }
+    protected void calculateJavaVoGenerators(List<String> warnings,
+                                                ProgressCallback progressCallback) {
+        AbstractJavaGenerator javaGenerator = new VoGenerator();
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        javaVoGenerators.add(javaGenerator);
+    }
 
     protected void initializeAbstractGenerator(
             AbstractGenerator abstractGenerator, List<String> warnings,
@@ -184,7 +197,18 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
                 answer.add(gjf);
             }
         }
-
+        for (AbstractJavaGenerator javaGenerator : javaVoGenerators) {
+            List<CompilationUnit> compilationUnits = javaGenerator
+                    .getCompilationUnits();
+            for (CompilationUnit compilationUnit : compilationUnits) {
+                GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
+                        context.getJavaVoGeneratorConfiguration()
+                                .getTargetProject(),
+                        context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
+                        context.getJavaFormatter());
+                answer.add(gjf);
+            }
+        }
         for (AbstractJavaGenerator javaGenerator : clientGenerators) {
             List<CompilationUnit> compilationUnits = javaGenerator
                     .getCompilationUnits();
@@ -223,6 +247,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     public int getGenerationSteps() {
         return javaModelGenerators.size()
                 + clientGenerators.size()
+                + javaVoGenerators.size()
                 + (xmlMapperGenerator == null ? 0 : 1);
     }
 

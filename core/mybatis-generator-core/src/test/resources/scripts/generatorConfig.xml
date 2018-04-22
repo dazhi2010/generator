@@ -34,11 +34,14 @@
       <property name="connectionURL" value="${database.url}"/>
       <property name="userId" value="sa"/>
     </connectionFactory>
-    
+
     <javaModelGenerator targetPackage="mbg.test.mb3.generated.flat.model" targetProject="MAVEN">
       <property name="enableSubPackages" value="true" />
       <property name="trimStrings" value="true" />
     </javaModelGenerator>
+
+      <javaVoGenerator targetPackage="mbg.test.mb3.generated.flat.vo" targetProject="MAVEN">
+      </javaVoGenerator>
 
     <sqlMapGenerator targetPackage="mbg.test.mb3.generated.flat.xml"  targetProject="MAVEN">
       <property name="enableSubPackages" value="true" />

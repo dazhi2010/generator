@@ -25,15 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.GeneratedKey;
-import org.mybatis.generator.config.JavaClientGeneratorConfiguration;
-import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
-import org.mybatis.generator.config.ModelType;
-import org.mybatis.generator.config.PropertyHolder;
-import org.mybatis.generator.config.PropertyRegistry;
-import org.mybatis.generator.config.SqlMapGeneratorConfiguration;
-import org.mybatis.generator.config.TableConfiguration;
+import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.rules.ConditionalModelRules;
 import org.mybatis.generator.internal.rules.FlatModelRules;
 import org.mybatis.generator.internal.rules.HierarchicalModelRules;
@@ -59,6 +51,7 @@ public abstract class IntrospectedTable {
         ATTR_DAO_IMPLEMENTATION_TYPE,
         ATTR_DAO_INTERFACE_TYPE,
         ATTR_PRIMARY_KEY_TYPE,
+        ATTR_VO_TYPE,
         ATTR_BASE_RECORD_TYPE,
         ATTR_RECORD_WITH_BLOBS_TYPE,
         ATTR_EXAMPLE_TYPE,
@@ -352,6 +345,10 @@ public abstract class IntrospectedTable {
         return internalAttributes.get(InternalAttribute.ATTR_PRIMARY_KEY_TYPE);
     }
 
+    public String getVoType(){
+        return internalAttributes.get(InternalAttribute.ATTR_VO_TYPE);
+    }
+
     /**
      * Gets the base record type.
      *
@@ -504,6 +501,7 @@ public abstract class IntrospectedTable {
     public void initialize() {
         calculateJavaClientAttributes();
         calculateModelAttributes();
+        calculateVoAttributes();
         calculateXmlAttributes();
 
         if (tableConfiguration.getModelType() == ModelType.HIERARCHICAL) {
@@ -882,6 +880,17 @@ public abstract class IntrospectedTable {
         return sb.toString();
     }
 
+    protected String calculateJavaVoPackage() {
+        JavaVoGeneratorConfiguration config = context
+                .getJavaVoGeneratorConfiguration();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getTargetPackage());
+        sb.append(fullyQualifiedTable.getSubPackageForModel(isSubPackagesEnabled(config)));
+
+        return sb.toString();
+    }
+
     protected void calculateModelAttributes() {
         String pakkage = calculateJavaModelPackage();
 
@@ -911,6 +920,17 @@ public abstract class IntrospectedTable {
         sb.append(fullyQualifiedTable.getDomainObjectName());
         sb.append("Example"); //$NON-NLS-1$
         setExampleType(sb.toString());
+    }
+
+    protected void calculateVoAttributes() {
+        String pakkage = calculateJavaVoPackage();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(pakkage);
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append("Vo"); //$NON-NLS-1$
+        setVoType(sb.toString());
     }
 
     protected String calculateSqlMapPackage() {
@@ -1071,6 +1091,11 @@ public abstract class IntrospectedTable {
     public void setPrimaryKeyType(String primaryKeyType) {
         internalAttributes.put(InternalAttribute.ATTR_PRIMARY_KEY_TYPE,
                 primaryKeyType);
+    }
+
+    public void setVoType(String voType) {
+        internalAttributes.put(InternalAttribute.ATTR_VO_TYPE,
+                voType);
     }
 
     public void setBaseRecordType(String baseRecordType) {

@@ -177,6 +177,8 @@ public class MyBatisGeneratorConfigurationParser {
                 parseConnectionFactory(context, childNode);
             } else if ("javaModelGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseJavaModelGenerator(context, childNode);
+            } else if ("javaVoGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$ //Vo生成
+                parseJavaVoGenerator(context, childNode);
             } else if ("javaTypeResolver".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseJavaTypeResolver(context, childNode);
             } else if ("sqlMapGenerator".equals(childNode.getNodeName())) { //$NON-NLS-1$
@@ -601,6 +603,31 @@ public class MyBatisGeneratorConfigurationParser {
 
             if ("property".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseProperty(javaModelGeneratorConfiguration, childNode);
+            }
+        }
+    }
+
+    protected void parseJavaVoGenerator(Context context, Node node) {
+        JavaVoGeneratorConfiguration javaVoGeneratorConfiguration = new JavaVoGeneratorConfiguration();
+        context.setJavaVoGeneratorConfiguration(javaVoGeneratorConfiguration);
+
+        Properties attributes = parseAttributes(node);
+        String targetPackage = attributes.getProperty("targetPackage"); //$NON-NLS-1$
+        String targetProject = attributes.getProperty("targetProject"); //$NON-NLS-1$
+
+        javaVoGeneratorConfiguration.setTargetPackage(targetPackage);
+        javaVoGeneratorConfiguration.setTargetProject(targetProject);
+
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node childNode = nodeList.item(i);
+
+            if (childNode.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+
+            if ("property".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                parseProperty(javaVoGeneratorConfiguration, childNode);
             }
         }
     }

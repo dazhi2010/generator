@@ -58,7 +58,6 @@ public class JavaCodeGenerationTest {
     @Parameters
     public static List<GeneratedJavaFile> generateJavaFiles() throws Exception {
         String a= JavaBeansUtil.getCamelCaseString("is",false);
-        System.out.println(a);
         List<GeneratedJavaFile> generatedFiles = new ArrayList<GeneratedJavaFile>();
         generatedFiles.addAll(generateJavaFilesMybatis());
 //        generatedFiles.addAll(generateJavaFilesMybatisDsql());

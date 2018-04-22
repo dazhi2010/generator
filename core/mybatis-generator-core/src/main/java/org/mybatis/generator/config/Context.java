@@ -1,5 +1,5 @@
 /**
- *    Copyright 2006-2017 the original author or authors.
+ *    Copyright 2006-2018 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -61,6 +61,8 @@ public class Context extends PropertyHolder {
     private JavaTypeResolverConfiguration javaTypeResolverConfiguration;
 
     private JavaModelGeneratorConfiguration javaModelGeneratorConfiguration;
+
+    private JavaVoGeneratorConfiguration JavaVoGeneratorConfiguration;
 
     private JavaClientGeneratorConfiguration javaClientGeneratorConfiguration;
 
@@ -212,6 +214,14 @@ public class Context extends PropertyHolder {
     public void setJavaModelGeneratorConfiguration(
             JavaModelGeneratorConfiguration javaModelGeneratorConfiguration) {
         this.javaModelGeneratorConfiguration = javaModelGeneratorConfiguration;
+    }
+
+    public JavaVoGeneratorConfiguration getJavaVoGeneratorConfiguration() {
+        return JavaVoGeneratorConfiguration;
+    }
+
+    public void setJavaVoGeneratorConfiguration(JavaVoGeneratorConfiguration javaVoGeneratorConfiguration) {
+        JavaVoGeneratorConfiguration = javaVoGeneratorConfiguration;
     }
 
     public void setJavaTypeResolverConfiguration(
