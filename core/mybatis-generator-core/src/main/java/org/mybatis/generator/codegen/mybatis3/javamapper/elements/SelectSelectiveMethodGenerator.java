@@ -52,7 +52,7 @@ public class SelectSelectiveMethodGenerator extends
         importedTypes.add(new FullyQualifiedJavaType(
                 "org.apache.ibatis.annotations.Param"));
 
-        FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+        FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getVoType());
         importedTypes.add(type);
         Parameter parameterRecord = new Parameter(type, "record");
         StringBuilder sb = new StringBuilder();

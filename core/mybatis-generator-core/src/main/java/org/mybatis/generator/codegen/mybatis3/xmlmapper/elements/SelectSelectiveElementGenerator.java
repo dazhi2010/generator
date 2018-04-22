@@ -62,8 +62,8 @@ public class SelectSelectiveElementGenerator extends
             }
         }
 
-        answer.addAttribute(new Attribute("parameterType", //$NON-NLS-1$
-                parameterType));
+//        answer.addAttribute(new Attribute("parameterType", //$NON-NLS-1$
+//                parameterType));
 
         StringBuilder sb = new StringBuilder();
         sb.append("select "); //$NON-NLS-1$
