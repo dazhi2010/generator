@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatis.generator.codegen.mybatis3.service;
+package org.mybatis.generator.codegen.mybatis3.restful;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
@@ -28,32 +28,28 @@ import java.util.*;
  * @author yuqinfa
  * 
  */
-public class ServiceImplGenerator extends AbstractJavaGenerator {
+public class RestfulGenerator extends AbstractJavaGenerator {
 
-    public ServiceImplGenerator() {
+    public RestfulGenerator() {
         super();
     }
 
     @Override
     public List<CompilationUnit> getCompilationUnits() {
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(
-                introspectedTable.getServiceImplType());
+                introspectedTable.getRestfulType());
         FreeMarkerGeneratedClass generatedClass = new FreeMarkerGeneratedClass(type);
         Map<String,Object> root = new HashMap<String,Object>();
         Set<String> imports = new HashSet<>();
         imports.add(introspectedTable.getBaseRecordType());
         imports.add(introspectedTable.getVoType());
-        imports.add("java.util.List");
-        imports.add(introspectedTable.getMyBatis3JavaMapperType());
         imports.add(introspectedTable.getServiceType());
-        root.put("packageFullPath",introspectedTable.getContext().getJavaServiceImplGeneratorConfiguration().getTargetPackage());
-        root.put("MapperName",new FullyQualifiedJavaType(introspectedTable.getMyBatis3JavaMapperType()).getShortName());
-        root.put("serviceImplName",type.getShortName());
+        root.put("packageFullPath",introspectedTable.getContext().getJavaRestfulGeneratorConfiguration().getTargetPackage());
         root.put("serviceName",new FullyQualifiedJavaType(introspectedTable.getServiceType()).getShortName());
-        root.put("modelName",new FullyQualifiedJavaType(
-                introspectedTable.getBaseRecordType()).getShortName());
-        root.put("voName",new FullyQualifiedJavaType(
-                introspectedTable.getVoType()).getShortName());
+        String modelName = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()).getShortName();
+        root.put("modelName",modelName);
+        root.put("voName",new FullyQualifiedJavaType(introspectedTable.getVoType()).getShortName());
+        root.put("pathName", Character.toLowerCase(modelName.charAt(0)) + modelName.substring(1));
         List<IntrospectedColumn> pks = introspectedTable.getPrimaryKeyColumns();
         int keyCount = pks.size();
         FullyQualifiedJavaType typeArgument = null;
@@ -63,27 +59,11 @@ public class ServiceImplGenerator extends AbstractJavaGenerator {
             typeArgument = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         }
         imports.add(typeArgument.getFullyQualifiedName());
-        StringBuilder pkFullSB = new StringBuilder();
-        StringBuilder pkNoTypeSB = new StringBuilder();
-        for (int i = 0; i < keyCount; i++) {
-            IntrospectedColumn ic = pks.get(i);
-            pkFullSB.append(ic.getFullyQualifiedJavaType().getShortName());
-            pkFullSB.append(" ");
-            pkFullSB.append(ic.getJavaProperty());
-            pkNoTypeSB.append(ic.getJavaProperty());
-            if(i<pks.size()-1){
-                pkFullSB.append(",");
-                pkNoTypeSB.append(",");
-            }
-            imports.add(ic.getFullyQualifiedJavaType().getFullyQualifiedName());
-        }
-        root.put("pkFields",pkFullSB.toString());
-        root.put("pkFieldsNoType",pkNoTypeSB.toString());
         root.put("deleteClass",typeArgument.getShortName());
 
         root.put("imports",imports);
         generatedClass.setParams(root);
-        generatedClass.setTemplateFileName("java_service_impl.ftl");
+        generatedClass.setTemplateFileName("java_restful.ftl");
         List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
         if (context.getPlugins().modelExampleClassGenerated(
                 generatedClass, introspectedTable)) {

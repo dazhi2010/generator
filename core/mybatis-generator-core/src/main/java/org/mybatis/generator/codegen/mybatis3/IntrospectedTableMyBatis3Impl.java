@@ -35,6 +35,7 @@ import org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
+import org.mybatis.generator.codegen.mybatis3.restful.RestfulGenerator;
 import org.mybatis.generator.codegen.mybatis3.service.ServiceGenerator;
 import org.mybatis.generator.codegen.mybatis3.service.ServiceImplGenerator;
 import org.mybatis.generator.codegen.mybatis3.vo.VoGenerator;
@@ -203,10 +204,10 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 
     protected void calculateJavaRestfulGenerators(List<String> warnings,
                                              ProgressCallback progressCallback) {
-//        AbstractJavaGenerator javaGenerator = new VoGenerator();
-//        initializeAbstractGenerator(javaGenerator, warnings,
-//                progressCallback);
-//        javaRestfulGenerators.add(javaGenerator);
+        AbstractJavaGenerator javaGenerator = new RestfulGenerator();
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        javaRestfulGenerators.add(javaGenerator);
     }
 
     protected void initializeAbstractGenerator(
