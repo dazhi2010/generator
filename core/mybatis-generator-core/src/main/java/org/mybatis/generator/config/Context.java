@@ -62,7 +62,13 @@ public class Context extends PropertyHolder {
 
     private JavaModelGeneratorConfiguration javaModelGeneratorConfiguration;
 
-    private JavaVoGeneratorConfiguration JavaVoGeneratorConfiguration;
+    private JavaVoGeneratorConfiguration javaVoGeneratorConfiguration;
+
+    private JavaServiceGeneratorConfiguration javaServiceGeneratorConfiguration;
+
+    private JavaServiceImplGeneratorConfiguration javaServiceImplGeneratorConfiguration;
+
+    private JavaRestfulGeneratorConfiguration javaRestfulGeneratorConfiguration;
 
     private JavaClientGeneratorConfiguration javaClientGeneratorConfiguration;
 
@@ -217,11 +223,35 @@ public class Context extends PropertyHolder {
     }
 
     public JavaVoGeneratorConfiguration getJavaVoGeneratorConfiguration() {
-        return JavaVoGeneratorConfiguration;
+        return javaVoGeneratorConfiguration;
     }
 
     public void setJavaVoGeneratorConfiguration(JavaVoGeneratorConfiguration javaVoGeneratorConfiguration) {
-        JavaVoGeneratorConfiguration = javaVoGeneratorConfiguration;
+        this.javaVoGeneratorConfiguration = javaVoGeneratorConfiguration;
+    }
+
+    public JavaServiceGeneratorConfiguration getJavaServiceGeneratorConfiguration() {
+        return javaServiceGeneratorConfiguration;
+    }
+
+    public void setJavaServiceGeneratorConfiguration(JavaServiceGeneratorConfiguration javaServiceGeneratorConfiguration) {
+        this.javaServiceGeneratorConfiguration = javaServiceGeneratorConfiguration;
+    }
+
+    public JavaServiceImplGeneratorConfiguration getJavaServiceImplGeneratorConfiguration() {
+        return javaServiceImplGeneratorConfiguration;
+    }
+
+    public void setJavaServiceImplGeneratorConfiguration(JavaServiceImplGeneratorConfiguration javaServiceImplGeneratorConfiguration) {
+        this.javaServiceImplGeneratorConfiguration = javaServiceImplGeneratorConfiguration;
+    }
+
+    public JavaRestfulGeneratorConfiguration getJavaRestfulGeneratorConfiguration() {
+        return javaRestfulGeneratorConfiguration;
+    }
+
+    public void setJavaRestfulGeneratorConfiguration(JavaRestfulGeneratorConfiguration javaRestfulGeneratorConfiguration) {
+        this.javaRestfulGeneratorConfiguration = javaRestfulGeneratorConfiguration;
     }
 
     public void setJavaTypeResolverConfiguration(

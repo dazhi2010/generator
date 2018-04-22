@@ -40,8 +40,7 @@ public class VoGenerator extends AbstractJavaGenerator {
         imports.add(introspectedTable.getBaseRecordType());
         root.put("packageFullPath",introspectedTable.getContext().getJavaVoGeneratorConfiguration().getTargetPackage());
         root.put("imports",imports);
-        root.put("classVoName",new FullyQualifiedJavaType(
-                introspectedTable.getBaseRecordType()).getShortName()+"Vo");
+        root.put("classVoName",type.getShortName());
         root.put("className",new FullyQualifiedJavaType(
                 introspectedTable.getBaseRecordType()).getShortName());
         generatedClass.setParams(root);

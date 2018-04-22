@@ -52,6 +52,9 @@ public abstract class IntrospectedTable {
         ATTR_DAO_INTERFACE_TYPE,
         ATTR_PRIMARY_KEY_TYPE,
         ATTR_VO_TYPE,
+        ATTR_SERVICE_TYPE,
+        ATTR_SERVICE_IMPL_TYPE,
+        ATTR_RESTFUL_TYPE,
         ATTR_BASE_RECORD_TYPE,
         ATTR_RECORD_WITH_BLOBS_TYPE,
         ATTR_EXAMPLE_TYPE,
@@ -348,6 +351,15 @@ public abstract class IntrospectedTable {
     public String getVoType(){
         return internalAttributes.get(InternalAttribute.ATTR_VO_TYPE);
     }
+    public String getServiceType(){
+        return internalAttributes.get(InternalAttribute.ATTR_SERVICE_TYPE);
+    }
+    public String getServiceImplType(){
+        return internalAttributes.get(InternalAttribute.ATTR_SERVICE_IMPL_TYPE);
+    }
+    public String getRestfulType(){
+        return internalAttributes.get(InternalAttribute.ATTR_RESTFUL_TYPE);
+    }
 
     /**
      * Gets the base record type.
@@ -502,6 +514,7 @@ public abstract class IntrospectedTable {
         calculateJavaClientAttributes();
         calculateModelAttributes();
         calculateVoAttributes();
+        calculateServiceAndRestfulAttributes();
         calculateXmlAttributes();
 
         if (tableConfiguration.getModelType() == ModelType.HIERARCHICAL) {
@@ -891,6 +904,36 @@ public abstract class IntrospectedTable {
         return sb.toString();
     }
 
+    protected String calculateJavaServicePackage() {
+        JavaServiceGeneratorConfiguration config = context
+                .getJavaServiceGeneratorConfiguration();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getTargetPackage());
+        sb.append(fullyQualifiedTable.getSubPackageForModel(isSubPackagesEnabled(config)));
+
+        return sb.toString();
+    }
+    protected String calculateJavaServiceImplPackage() {
+        JavaServiceImplGeneratorConfiguration config = context
+                .getJavaServiceImplGeneratorConfiguration();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getTargetPackage());
+        sb.append(fullyQualifiedTable.getSubPackageForModel(isSubPackagesEnabled(config)));
+
+        return sb.toString();
+    }
+    protected String calculateJavaRestfulPackage() {
+        JavaRestfulGeneratorConfiguration config = context
+                .getJavaRestfulGeneratorConfiguration();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(config.getTargetPackage());
+        sb.append(fullyQualifiedTable.getSubPackageForModel(isSubPackagesEnabled(config)));
+
+        return sb.toString();
+    }
     protected void calculateModelAttributes() {
         String pakkage = calculateJavaModelPackage();
 
@@ -931,6 +974,29 @@ public abstract class IntrospectedTable {
         sb.append(fullyQualifiedTable.getDomainObjectName());
         sb.append("Vo"); //$NON-NLS-1$
         setVoType(sb.toString());
+    }
+
+    protected void calculateServiceAndRestfulAttributes() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(calculateJavaServicePackage());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append("Service"); //$NON-NLS-1$
+        setServiceType(sb.toString());
+
+        sb.setLength(0);
+        sb.append(calculateJavaServiceImplPackage());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append("ServiceImpl"); //$NON-NLS-1$
+        setServiceImplType(sb.toString());
+
+        sb.setLength(0);
+        sb.append(calculateJavaRestfulPackage());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append("Restful"); //$NON-NLS-1$
+        setRestfulType(sb.toString());
     }
 
     protected String calculateSqlMapPackage() {
@@ -1097,7 +1163,15 @@ public abstract class IntrospectedTable {
         internalAttributes.put(InternalAttribute.ATTR_VO_TYPE,
                 voType);
     }
-
+    public void setServiceType(String s){
+        internalAttributes.put(InternalAttribute.ATTR_SERVICE_TYPE,s);
+    }
+    public void setServiceImplType(String s){
+        internalAttributes.put(InternalAttribute.ATTR_SERVICE_IMPL_TYPE,s);
+    }
+    public void setRestfulType(String s){
+        internalAttributes.put(InternalAttribute.ATTR_RESTFUL_TYPE,s);
+    }
     public void setBaseRecordType(String baseRecordType) {
         internalAttributes.put(InternalAttribute.ATTR_BASE_RECORD_TYPE,
                 baseRecordType);

@@ -42,7 +42,12 @@
 
       <javaVoGenerator targetPackage="mbg.test.mb3.generated.flat.vo" targetProject="MAVEN">
       </javaVoGenerator>
-
+      <javaServiceGenerator targetPackage="mbg.test.mb3.generated.flat.service" targetProject="MAVEN">
+      </javaServiceGenerator>
+      <javaServiceImplGenerator targetPackage="mbg.test.mb3.generated.flat.service.impl" targetProject="MAVEN">
+      </javaServiceImplGenerator>
+      <javaRestfulGenerator targetPackage="mbg.test.mb3.generated.flat.restful" targetProject="MAVEN">
+      </javaRestfulGenerator>
     <sqlMapGenerator targetPackage="mbg.test.mb3.generated.flat.xml"  targetProject="MAVEN">
       <property name="enableSubPackages" value="true" />
     </sqlMapGenerator>

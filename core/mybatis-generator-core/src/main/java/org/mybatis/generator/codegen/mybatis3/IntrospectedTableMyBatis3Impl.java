@@ -35,6 +35,8 @@ import org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
+import org.mybatis.generator.codegen.mybatis3.service.ServiceGenerator;
+import org.mybatis.generator.codegen.mybatis3.service.ServiceImplGenerator;
 import org.mybatis.generator.codegen.mybatis3.vo.VoGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
@@ -49,6 +51,12 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 
     protected List<AbstractJavaGenerator> javaVoGenerators;
 
+    protected List<AbstractJavaGenerator> javaServiceGenerators;
+
+    protected List<AbstractJavaGenerator> javaServiceImplGenerators;
+
+    protected List<AbstractJavaGenerator> javaRestfulGenerators;
+
     protected List<AbstractJavaGenerator> clientGenerators;
 
     protected AbstractXmlGenerator xmlMapperGenerator;
@@ -57,6 +65,9 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         super(TargetRuntime.MYBATIS3);
         javaModelGenerators = new ArrayList<AbstractJavaGenerator>();
         javaVoGenerators = new ArrayList<AbstractJavaGenerator>();
+        javaServiceGenerators = new ArrayList<AbstractJavaGenerator>();
+        javaServiceImplGenerators = new ArrayList<AbstractJavaGenerator>();
+        javaRestfulGenerators = new ArrayList<AbstractJavaGenerator>();
         clientGenerators = new ArrayList<AbstractJavaGenerator>();
     }
 
@@ -66,7 +77,13 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         calculateJavaModelGenerators(warnings, progressCallback);
 
         calculateJavaVoGenerators(warnings, progressCallback);
-        
+
+        calculateJavaServiceGenerators(warnings,progressCallback);
+
+        calculateJavaServiceImplGenerators(warnings,progressCallback);
+
+        calculateJavaRestfulGenerators(warnings,progressCallback);
+
         AbstractJavaClientGenerator javaClientGenerator =
                 calculateClientGenerators(warnings, progressCallback);
             
@@ -168,6 +185,30 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         javaVoGenerators.add(javaGenerator);
     }
 
+    protected void calculateJavaServiceGenerators(List<String> warnings,
+                                             ProgressCallback progressCallback) {
+        AbstractJavaGenerator javaGenerator = new ServiceGenerator();
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        javaServiceGenerators.add(javaGenerator);
+    }
+
+    protected void calculateJavaServiceImplGenerators(List<String> warnings,
+                                             ProgressCallback progressCallback) {
+        AbstractJavaGenerator javaGenerator = new ServiceImplGenerator();
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        javaServiceImplGenerators.add(javaGenerator);
+    }
+
+    protected void calculateJavaRestfulGenerators(List<String> warnings,
+                                             ProgressCallback progressCallback) {
+//        AbstractJavaGenerator javaGenerator = new VoGenerator();
+//        initializeAbstractGenerator(javaGenerator, warnings,
+//                progressCallback);
+//        javaRestfulGenerators.add(javaGenerator);
+    }
+
     protected void initializeAbstractGenerator(
             AbstractGenerator abstractGenerator, List<String> warnings,
             ProgressCallback progressCallback) {
@@ -203,6 +244,42 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             for (CompilationUnit compilationUnit : compilationUnits) {
                 GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
                         context.getJavaVoGeneratorConfiguration()
+                                .getTargetProject(),
+                        context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
+                        context.getJavaFormatter());
+                answer.add(gjf);
+            }
+        }
+        for (AbstractJavaGenerator javaGenerator : javaServiceGenerators) {
+            List<CompilationUnit> compilationUnits = javaGenerator
+                    .getCompilationUnits();
+            for (CompilationUnit compilationUnit : compilationUnits) {
+                GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
+                        context.getJavaServiceGeneratorConfiguration()
+                                .getTargetProject(),
+                        context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
+                        context.getJavaFormatter());
+                answer.add(gjf);
+            }
+        }
+        for (AbstractJavaGenerator javaGenerator : javaServiceImplGenerators) {
+            List<CompilationUnit> compilationUnits = javaGenerator
+                    .getCompilationUnits();
+            for (CompilationUnit compilationUnit : compilationUnits) {
+                GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
+                        context.getJavaServiceImplGeneratorConfiguration()
+                                .getTargetProject(),
+                        context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
+                        context.getJavaFormatter());
+                answer.add(gjf);
+            }
+        }
+        for (AbstractJavaGenerator javaGenerator : javaRestfulGenerators) {
+            List<CompilationUnit> compilationUnits = javaGenerator
+                    .getCompilationUnits();
+            for (CompilationUnit compilationUnit : compilationUnits) {
+                GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
+                        context.getJavaRestfulGeneratorConfiguration()
                                 .getTargetProject(),
                         context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
                         context.getJavaFormatter());
@@ -248,6 +325,9 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         return javaModelGenerators.size()
                 + clientGenerators.size()
                 + javaVoGenerators.size()
+                + javaServiceGenerators.size()
+                + javaServiceImplGenerators.size()
+                + javaRestfulGenerators.size()
                 + (xmlMapperGenerator == null ? 0 : 1);
     }
 
